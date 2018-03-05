@@ -2,6 +2,7 @@ import React from 'react'
 import SearchInput from '../components/SearchInput/SearchInput'
 import CourseList from '../components/CourseList/CourseList'
 import FirebaseAPI from '../modules/FirebaseAPI'
+import { debounce } from 'lodash'
 import './App.css'
 
 const API_URL = 'https://searcher-academy.firebaseio.com/courses.json'
@@ -12,6 +13,7 @@ class App extends React.Component {
     this.state = {
       courses: []
     }
+    this.getCourses = debounce(this.getCourses, 500)
     this._handleChange = this._handleChange.bind(this)
     this._handleSubmit = this._handleSubmit.bind(this)
   }
@@ -32,7 +34,7 @@ class App extends React.Component {
 
   /* Handler when input in searchinput change */
   _handleChange (event) {
-    console.log(event.target.value)
+    this.getCourses(API_URL, event.target.value)
   }
 
   /* Avoid submit in form inside searchinput */

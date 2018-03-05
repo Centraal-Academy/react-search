@@ -1,10 +1,14 @@
 import React from 'react'
 import SearchInput from '../components/SearchInput/SearchInput'
+import CourseList from '../components/CourseList/CourseList'
 import './App.css'
 
 class App extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+      courses: []
+    }
     this._handleChange = this._handleChange.bind(this)
     this._handleSubmit = this._handleSubmit.bind(this)
   }
@@ -24,6 +28,7 @@ class App extends React.Component {
       <section>
         <h1>Search Course</h1>
         <SearchInput onSubmit={this._handleSubmit} onChange={this._handleChange} />
+        <CourseList courses={this.state.courses} />
       </section>
     )
   }

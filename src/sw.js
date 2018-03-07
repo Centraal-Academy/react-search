@@ -1,6 +1,6 @@
-/* global self, caches, fetch */
+/* global self, caches, fetch, Notification */
 
-const MY_CACHE_NAME = 'search-cache-v1'
+const MY_CACHE_NAME = 'search-cache-v2'
 
 var urlsToCache = [
   '/',
@@ -42,4 +42,17 @@ self.addEventListener('fetch', (event) => {
         return fetch(event.request)
       })
   )
+})
+
+self.addEventListener('push', (event) => {
+  if (Notification && Notification.permission === 'granted') {
+    const data = event.data || {}
+    let title = data.title || 'Notificacion'
+    let options = {
+      body: data.body || 'Tienes un mensaje nuevo'
+    }
+    event.waitUntil(self.registration.showNotification(title, options))
+  } else {
+    console.log(event)
+  }
 })

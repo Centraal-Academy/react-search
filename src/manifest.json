@@ -4,5 +4,6 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fff",
-  "description": "Course searcher"
+  "description": "Course searcher",
+  "gcm_sender_id": "103953800507"
 }

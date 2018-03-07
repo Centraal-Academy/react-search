@@ -27,7 +27,8 @@ const config = {
     }),
     new CopyWebpackPlugin([
       {from: 'src/manifest.json'},
-      {from: 'src/sw.js'}
+      {from: 'src/sw.js'},
+      {from: 'src/firebase-messaging-sw.js'}
     ])
   ]
 }

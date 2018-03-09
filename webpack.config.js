@@ -1,6 +1,9 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
 const path = require('path')
+
+const keys = require('./keys')
 
 const config = {
   module: {
@@ -10,7 +13,8 @@ const config = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['react', 'env']
+            presets: ['react', 'env'],
+            plugins: ['transform-object-rest-spread']
           }
         }
       },
@@ -29,7 +33,8 @@ const config = {
       {from: 'src/manifest.json'},
       {from: 'src/sw.js'},
       {from: 'src/firebase-messaging-sw.js'}
-    ])
+    ]),
+    new webpack.DefinePlugin(keys)
   ]
 }
 

@@ -1,56 +1,64 @@
 import React from 'react'
-import SearchInput from '../components/SearchInput/SearchInput'
-import CourseList from '../components/CourseList/CourseList'
-import FirebaseAPI from '../modules/FirebaseAPI'
-import { debounce } from 'lodash'
+import FirebaseAdapter from '../modules/FirebaseAdapter'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import Login from '../components/Login/Login'
+import Search from '../components/Search/Search'
 import './App.css'
 
-const API_URL = 'https://searcher-academy.firebaseio.com/courses.json'
+const auth = FirebaseAdapter.getAuth()
 
 class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      courses: []
+      user: null
     }
-    this.getCourses = debounce(this.getCourses, 500)
-    this._handleChange = this._handleChange.bind(this)
-    this._handleSubmit = this._handleSubmit.bind(this)
   }
 
   componentDidMount () {
-    this.getCourses(API_URL)
+    this.unSuscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ user })
+      } else {
+        this.setState({ user: null })
+      }
+    })
   }
 
-  getCourses (url, pattern) {
-    let query = ''
-    if (pattern) {
-      query = `?orderBy="name"&startAt="${pattern}"&endAt="${pattern}\uf8ff"`
-    }
-    const ENDPOINT_URL = `${url}${query}`
-    FirebaseAPI.get(ENDPOINT_URL)
-      .then(courses => this.setState({ courses }))
-  }
-
-  /* Handler when input in searchinput change */
-  _handleChange (event) {
-    this.getCourses(API_URL, event.target.value)
-  }
-
-  /* Avoid submit in form inside searchinput */
-  _handleSubmit (event) {
-    event.preventDefault()
+  componentWillUnmount () {
+    this.unSuscribe()
   }
 
   render () {
     return (
-      <section>
-        <h1>Search Course</h1>
-        <SearchInput onSubmit={this._handleSubmit} onChange={this._handleChange} />
-        <CourseList courses={this.state.courses} />
-      </section>
+      <Router>
+        <div>
+          <LoginRoute authed={this.state.user} path='/login' component={Login} />
+          <PrivateRoute exact authed={this.state.user} path='/' component={Search} />
+        </div>
+      </Router>
     )
   }
+}
+
+function LoginRoute ({ component: Component, authed, ...rest }) {
+  return (
+    <Route {...rest}
+      render={(props) => !authed
+        ? <Component {...rest} />
+        : <Redirect to={{pathname: '/', state: {from: props.location}}} />}
+    />
+  )
+}
+
+function PrivateRoute ({ component: Component, authed, ...rest }) {
+  return (
+    <Route {...rest}
+      render={(props) => authed
+        ? <Component {...rest} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
 }
 
 export default App

@@ -2,7 +2,7 @@ import React from 'react'
 import SearchInput from '../SearchInput/SearchInput'
 import CourseList from '../CourseList/CourseList'
 import FirebaseAPI from '../../modules/FirebaseAPI'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import FirebaseAdapter from '../../modules/FirebaseAdapter'
 
 const auth = FirebaseAdapter.getAuth()
@@ -36,7 +36,7 @@ class Search extends React.Component {
   }
 
   _logout () {
-    auth.signOut()
+    auth().signOut()
   }
 
   /* Handler when input in searchinput change */

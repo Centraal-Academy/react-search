@@ -1,8 +1,8 @@
 import React from 'react'
 import FirebaseAdapter from '../modules/FirebaseAdapter'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
-import Login from '../components/Login/Login'
-import Search from '../components/Search/Search'
+import LoginAsync from '../components/Login/LoginAsync'
+import SearchAsync from '../components/Search/SearchAsync'
 import './App.css'
 
 const auth = FirebaseAdapter.getAuth()
@@ -16,7 +16,7 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    this.unSuscribe = auth.onAuthStateChanged((user) => {
+    this.unSuscribe = auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({ user })
       } else {
@@ -33,8 +33,8 @@ class App extends React.Component {
     return (
       <Router>
         <div>
-          <LoginRoute authed={this.state.user} path='/login' component={Login} />
-          <PrivateRoute exact authed={this.state.user} path='/' component={Search} />
+          <LoginRoute authed={this.state.user} path='/login' component={LoginAsync} />
+          <PrivateRoute exact authed={this.state.user} path='/' component={SearchAsync} />
         </div>
       </Router>
     )

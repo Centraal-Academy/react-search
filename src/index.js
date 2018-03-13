@@ -11,9 +11,8 @@ window.addEventListener('load', event => {
       console.log(registration)
     })
     .catch(console.error)
-
-  messaging.requestPermission()
-    .then(permission => messaging.getToken())
+  messaging().requestPermission()
+    .then(permission => messaging().getToken())
     .then(console.log)
     .catch(console.error)
 })

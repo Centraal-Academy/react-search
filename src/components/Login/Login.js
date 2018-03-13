@@ -1,6 +1,6 @@
 import React from 'react'
 import FirebaseAdapter from '../../modules/FirebaseAdapter'
-const firebase = FirebaseAdapter.getInstance()
+const auth = FirebaseAdapter.getAuth()
 
 class Login extends React.Component {
   constructor (props) {
@@ -9,8 +9,8 @@ class Login extends React.Component {
   }
 
   _authenticate () {
-    const provider = new firebase.auth.FacebookAuthProvider()
-    firebase.auth().signInWithPopup(provider)
+    const provider = new auth.FacebookAuthProvider()
+    auth().signInWithPopup(provider)
   }
 
   render () {

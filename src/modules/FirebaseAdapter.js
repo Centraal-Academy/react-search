@@ -3,7 +3,9 @@
   FIREBASE_DATABASE_URL, FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID
 */
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/messaging'
 
 function initFirebase (firebase) {
   const config = {
@@ -22,8 +24,8 @@ initFirebase(firebase)
 
 const adapter = {
   getInstance: () => firebase,
-  getMessaging: () => firebase.messaging(),
-  getAuth: () => firebase.auth()
+  getMessaging: () => firebase.messaging,
+  getAuth: () => firebase.auth
 }
 
 export default adapter
